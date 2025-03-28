@@ -1,191 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cosmo Promo</title>
-    <style>
-        /* Basic Styles */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #0a0a0a;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
+import React, { useState, useEffect } from 'react';
+import { AlertTriangle, Rocket, Zap } from 'lucide-react';
 
-        h1, h2 {
-            font-size: 2em;
-            text-align: center;
-        }
+const CosmoPromo = () => {
+  const [currentPage, setCurrentPage] = useState('intro');
+  const [websiteURL, setWebsiteURL] = useState('');
+  const [promotionCount, setPromotionCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
-        .intro-content {
-            text-align: center;
-            padding: 20px;
-        }
+  const handlePromoStart = () => {
+    if (!websiteURL) {
+      alert('Please enter a valid website URL.');
+      return;
+    }
 
-        #tapToPromote {
-            background-color: #ff0077;
-            padding: 15px 30px;
-            font-size: 1.5em;
-            cursor: pointer;
-            border-radius: 10px;
-            margin-top: 20px;
-            animation: pulse 1.5s infinite;
-            font-family: 'Courier New', Courier, monospace;
-        }
+    setIsLoading(true);
+    let count = 0;
+    const promotionInterval = setInterval(() => {
+      count++;
+      setPromotionCount(count);
+      
+      if (count >= 100) {
+        clearInterval(promotionInterval);
+        setIsLoading(false);
+        alert('Promotion Completed across the Cosmos! 🚀');
+      }
+    }, 100);
+  };
 
-        /* Pixel 3D Animation */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white flex flex-col items-center justify-center p-4 overflow-hidden">
+      {/* Starry Background Effect */}
+      <div className="fixed inset-0 bg-black opacity-80 pointer-events-none">
+        {[...Array(100)].map((_, i) => (
+          <div 
+            key={i} 
+            className="absolute bg-white rounded-full opacity-50" 
+            style={{
+              width: '2px', 
+              height: '2px', 
+              top: `${Math.random() * 100}%`, 
+              left: `${Math.random() * 100}%`,
+              animation: `twinkle ${Math.random() * 3 + 2}s infinite`
+            }}
+          />
+        ))}
+      </div>
 
-        .hidden {
-            display: none;
-        }
-
-        #main {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        input, button {
-            padding: 10px;
-            margin: 10px;
-            font-size: 1em;
-            border-radius: 5px;
-            border: none;
-        }
-
-        button {
-            background-color: #0077ff;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        /* 3D Pixel Effect for the loading */
-        #loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-        }
-
-        .loading-animation {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(45deg, #ff0077, #00f0ff);
-            animation: spin 2s linear infinite, pixel3D 1.5s infinite;
-            border-radius: 5px;
-            margin: 20px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes pixel3D {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 20px rgba(255, 0, 119, 0.5);
-            }
-            50% {
-                transform: scale(1.2);
-                box-shadow: 0 0 50px rgba(0, 240, 255, 0.8);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 20px rgba(255, 0, 119, 0.5);
-            }
-        }
-
-        #promotionStatus {
-            margin-top: 20px;
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        footer {
-            margin-top: 20px;
-            font-size: 0.8em;
-            color: #888;
-        }
-
-    </style>
-</head>
-<body>
-    <!-- Intro Page -->
-    <section id="intro">
-        <div class="intro-content">
-            <h1>Welcome to Cosmo Promo</h1>
-            <p>Your one-stop platform for promoting your website across the universe. Just tap and watch the magic happen!</p>
-            <div class="tap-to-promote" id="tapToPromote">Tap to Promote</div>
+      {/* Intro Page */}
+      {currentPage === 'intro' && (
+        <div className="relative z-10 text-center p-8 bg-black/50 rounded-2xl border border-purple-500/30 shadow-2xl transform transition-all duration-500 hover:scale-105">
+          <h1 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">
+            Cosmo Promo
+          </h1>
+          <p className="text-xl mb-6 text-gray-300">
+            Your cosmic gateway to universal website promotion
+          </p>
+          <button 
+            onClick={() => setCurrentPage('main')}
+            className="px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl 
+                       text-white font-bold text-lg 
+                       transform hover:scale-110 transition-transform 
+                       flex items-center justify-center gap-2 mx-auto
+                       animate-pulse hover:animate-none"
+          >
+            <Rocket className="mr-2" /> Launch Promotion
+          </button>
         </div>
-    </section>
+      )}
 
-    <!-- Main Page for Website URL Input -->
-    <section id="main" class="hidden">
-        <div class="main-content">
-            <h2>Ready to Promote Your Website?</h2>
-            <p>Enter your website URL below and watch as we spread it across the internet.</p>
-            <input type="url" id="websiteURL" placeholder="Enter your website URL" required>
-            <button id="startPromotion">Start Promotion</button>
-            <div id="promotionStatus">
-                <p>Promotion Count: <span id="promotionCount">0</span></p>
-            </div>
+      {/* Main Promotion Page */}
+      {currentPage === 'main' && (
+        <div className="relative z-10 w-full max-w-md bg-black/50 rounded-2xl p-8 border border-blue-500/30 shadow-2xl">
+          <h2 className="text-3xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-500">
+            Cosmic Promotion Portal
+          </h2>
+          <div className="space-y-4">
+            <input 
+              type="url" 
+              value={websiteURL}
+              onChange={(e) => setWebsiteURL(e.target.value)}
+              placeholder="Enter your cosmic website URL"
+              className="w-full px-4 py-3 rounded-xl bg-gray-800/80 border border-gray-700 
+                         focus:outline-none focus:ring-2 focus:ring-cyan-500 
+                         text-white placeholder-gray-500"
+            />
+            <button 
+              onClick={handlePromoStart}
+              disabled={isLoading}
+              className={`w-full px-6 py-4 rounded-xl text-white font-bold 
+                         ${isLoading 
+                           ? 'bg-gray-700 cursor-not-allowed' 
+                           : 'bg-gradient-to-r from-cyan-500 to-blue-500 hover:scale-105'} 
+                         transition-transform flex items-center justify-center gap-2`}
+            >
+              {isLoading ? (
+                <>
+                  <Zap className="animate-spin" /> Launching Promotion...
+                </>
+              ) : (
+                <>
+                  <Rocket /> Start Cosmic Promotion
+                </>
+              )}
+            </button>
+
+            {/* Promotion Status */}
+            {isLoading && (
+              <div className="mt-4">
+                <div className="w-full bg-gray-700 rounded-full h-2.5">
+                  <div 
+                    className="bg-cyan-500 h-2.5 rounded-full" 
+                    style={{width: `${promotionCount}%`}}
+                  ></div>
+                </div>
+                <p className="text-center mt-2 text-sm text-gray-400">
+                  Promotion Progress: {promotionCount}%
+                </p>
+              </div>
+            )}
+
+            {promotionCount === 100 && (
+              <div className="mt-4 text-center text-green-500 flex items-center justify-center gap-2">
+                <Rocket className="animate-bounce" />
+                Promotion Launched Across the Cosmos!
+                <Rocket className="animate-bounce" />
+              </div>
+            )}
+          </div>
         </div>
-    </section>
+      )}
 
-    <!-- Loading Animation -->
-    <div id="loading" class="hidden">
-        <div class="loading-animation"></div>
+      {/* Footer */}
+      <footer className="absolute bottom-4 text-center text-gray-500 text-sm">
+        © 2025 Cosmo Promo. Spreading websites across the universe.
+      </footer>
     </div>
+  );
+};
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Cosmo Promo. All rights reserved.</p>
-    </footer>
-
-    <script>
-        // Button to activate the promotion
-        document.getElementById('tapToPromote').addEventListener('click', () => {
-            document.getElementById('intro').classList.add('hidden');
-            document.getElementById('main').classList.remove('hidden');
-        });
-
-        // Start Promotion
-        document.getElementById('startPromotion').addEventListener('click', () => {
-            const websiteURL = document.getElementById('websiteURL').value;
-            if (!websiteURL) {
-                alert('Please enter a valid website URL.');
-                return;
-            }
-
-            // Show loading animation
-            document.getElementById('loading').style.display = 'block';
-
-            // Fake promotion process with pixel 3D effect
-            let promotionCount = 0;
-            const promotionInterval = setInterval(() => {
-                promotionCount++;
-                document.getElementById('promotionCount').textContent = promotionCount;
-                if (promotionCount >= 100) {  // simulate a limit or completion
-                    clearInterval(promotionInterval);
-                    document.getElementById('loading').style.display = 'none';
-                    alert('Promotion Completed!');
-                }
-            }, 100);  // Adjust interval speed for your needs
-        });
-    </script>
-</body>
-</html>
+export default CosmoPromo;
