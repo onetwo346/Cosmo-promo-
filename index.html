@@ -17,7 +17,7 @@
       align-items: center;
       justify-content: center;
       padding: 1rem;
-      overflow: hidden;
+      overflow-x: hidden;
       position: relative;
     }
 
@@ -43,6 +43,9 @@
                  inset 0 0 10px rgba(255, 255, 255, 0.1);
       transform: perspective(1000px) rotateX(5deg);
       transition: transform 0.5s ease;
+      width: 90%;
+      max-width: 32rem;
+      margin: 0 auto;
     }
 
     .container:hover {
@@ -50,13 +53,13 @@
     }
 
     .main-container {
-      width: 100%;
+      width: 90%;
       max-width: 28rem;
       border: 1px solid rgba(59, 130, 246, 0.3);
     }
 
     h1 {
-      font-size: 2.25rem;
+      font-size: clamp(1.75rem, 5vw, 2.25rem);
       font-weight: bold;
       margin-bottom: 1rem;
       background: linear-gradient(to right, #a855f7, #ec4899);
@@ -67,7 +70,7 @@
     }
 
     h2 {
-      font-size: 1.875rem;
+      font-size: clamp(1.5rem, 4vw, 1.875rem);
       font-weight: bold;
       margin-bottom: 1rem;
       background: linear-gradient(to right, #3b82f6, #06b6d4);
@@ -78,19 +81,19 @@
     }
 
     p {
-      font-size: 1.25rem;
+      font-size: clamp(1rem, 3vw, 1.25rem);
       margin-bottom: 1.5rem;
       color: #d1d5db;
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
 
     button {
-      padding: 1rem 2rem;
+      padding: 0.75rem 1.5rem;
       background: linear-gradient(to right, #ec4899, #a855f7);
       border-radius: 0.75rem;
       color: #ffffff;
       font-weight: bold;
-      font-size: 1.125rem;
+      font-size: clamp(0.875rem, 2vw, 1.125rem);
       border: none;
       cursor: pointer;
       display: flex;
@@ -104,9 +107,32 @@
     }
 
     button:hover:not(:disabled) {
-      transform: scale(1.1) translateY(-3px);
+      transform: scale(1.05) translateY(-2px);
       box-shadow: 0 8px 20px rgba(236, 72, 153, 0.6);
       animation: none;
+    }
+
+    /* Reduce animation on small screens and when reduced motion is preferred */
+    @media (max-width: 640px), (prefers-reduced-motion: reduce) {
+      button:hover:not(:disabled) {
+        transform: scale(1.02);
+      }
+      
+      .container {
+        transform: none;
+      }
+      
+      .container:hover {
+        transform: scale(1.02);
+      }
+      
+      .bounce {
+        animation: none;
+      }
+      
+      button {
+        animation: pulse 4s infinite;
+      }
     }
 
     @keyframes pulse {
@@ -124,6 +150,7 @@
       font-size: 1rem;
       outline: none;
       box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
     }
 
     input:focus {
@@ -151,6 +178,7 @@
     .progress-container {
       margin-top: 1rem;
       transition: opacity 0.3s;
+      width: 100%;
     }
 
     .progress-bar {
@@ -185,6 +213,7 @@
       justify-content: center;
       gap: 0.5rem;
       text-shadow: 0 0 5px rgba(34, 197, 94, 0.3);
+      flex-wrap: wrap;
     }
 
     .spin {
@@ -196,13 +225,15 @@
     }
 
     footer {
-      position: absolute;
-      bottom: 1rem;
+      position: relative;
+      margin-top: 2rem;
       text-align: center;
       color: #6b7280;
       font-size: 0.875rem;
       z-index: 10;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      padding: 1rem 0;
     }
 
     .hidden {
@@ -216,14 +247,37 @@
     /* Responsive Design */
     @media (max-width: 640px) {
       .container {
-        padding: 1.5rem;
+        padding: 1.5rem 1rem;
       }
-      h1 { font-size: 1.875rem; }
-      h2 { font-size: 1.5rem; }
-      p { font-size: 1rem; }
-      button { 
-        padding: 0.75rem 1.5rem; 
-        font-size: 1rem;
+      
+      footer {
+        margin-top: 1rem;
+      }
+      
+      .success-message {
+        font-size: 0.875rem;
+      }
+    }
+
+    @media (max-height: 700px) {
+      body {
+        height: auto;
+        padding: 1.5rem 1rem;
+      }
+      
+      .container {
+        margin: 1rem auto;
+      }
+    }
+    
+    /* Fix for iOS Safari */
+    @supports (-webkit-touch-callout: none) {
+      body, html {
+        height: -webkit-fill-available;
+      }
+      
+      body {
+        min-height: -webkit-fill-available;
       }
     }
 
@@ -234,7 +288,7 @@
 
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-5px); }
     }
   </style>
 </head>
@@ -245,7 +299,7 @@
     <h1>Cosmo Promo</h1>
     <p>Your cosmic gateway to universal website promotion</p>
     <button onclick="showMainPage()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
         <polyline points="15 3 21 3 21 9"></polyline>
         <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -259,7 +313,7 @@
     <div class="space-y-4">
       <input type="url" id="website-url" placeholder="Enter your cosmic website URL">
       <button id="promo-button" class="promo-button" onclick="startPromotion()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
           <polyline points="15 3 21 3 21 9"></polyline>
           <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -273,17 +327,11 @@
         <p class="progress-text" id="progress-text">Promotion Progress: 0%</p>
       </div>
       <div class="success-message hidden" id="success-message">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bounce">
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-          <polyline points="15 3 21 3 21 9"></polyline>
-          <line x1="10" y1="14" x2="21" y2="3"></line>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bounce">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
         </svg>
         Promotion Launched Across the Cosmos!
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bounce">
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-          <polyline points="15 3 21 3 21 9"></polyline>
-          <line x1="10" y1="14" x2="21" y2="3"></line>
-        </svg>
       </div>
     </div>
   </div>
@@ -294,12 +342,18 @@
     // 3D Starry Background with Animation
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('starry-bg'), alpha: true });
+    const renderer = new THREE.WebGLRenderer({ 
+      canvas: document.getElementById('starry-bg'), 
+      alpha: true,
+      antialias: true 
+    });
     
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    const particleCount = 1000;
+    // Reduce particle count on mobile
+    const isMobile = window.innerWidth < 768;
+    const particleCount = isMobile ? 500 : 1000;
     const particlesGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const velocities = new Float32Array(particleCount * 3);
@@ -316,7 +370,7 @@
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     const particlesMaterial = new THREE.PointsMaterial({
       color: 0xffffff,
-      size: 0.3,
+      size: isMobile ? 0.5 : 0.3,
       transparent: true,
       opacity: 0.8,
       blending: THREE.AdditiveBlending,
@@ -326,23 +380,32 @@
 
     camera.position.z = 100;
 
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let animationFrameId;
+
     function animate() {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
       
-      const positions = particles.geometry.attributes.position.array;
-      for (let i = 0; i < particleCount * 3; i += 3) {
-        positions[i] += velocities[i];
-        positions[i + 1] += velocities[i + 1];
-        positions[i + 2] += velocities[i + 2];
-        
-        if (Math.abs(positions[i]) > 100) velocities[i] *= -1;
-        if (Math.abs(positions[i + 1]) > 100) velocities[i + 1] *= -1;
-        if (Math.abs(positions[i + 2]) > 100) velocities[i + 2] *= -1;
+      // Only animate particles if reduced motion isn't preferred
+      if (!prefersReducedMotion) {
+        const positions = particles.geometry.attributes.position.array;
+        for (let i = 0; i < particleCount * 3; i += 3) {
+          positions[i] += velocities[i];
+          positions[i + 1] += velocities[i + 1];
+          positions[i + 2] += velocities[i + 2];
+          
+          if (Math.abs(positions[i]) > 100) velocities[i] *= -1;
+          if (Math.abs(positions[i + 1]) > 100) velocities[i + 1] *= -1;
+          if (Math.abs(positions[i + 2]) > 100) velocities[i + 2] *= -1;
+        }
+        particles.geometry.attributes.position.needsUpdate = true;
       }
-      particles.geometry.attributes.position.needsUpdate = true;
       
       renderer.render(scene, camera);
     }
+    
+    // Start animation
     animate();
 
     // Responsive handling
@@ -350,6 +413,15 @@
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Handle visibility change to save resources
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animationFrameId);
+      } else {
+        animate();
+      }
     });
 
     // Original functionality
@@ -368,16 +440,25 @@
     }
 
     function startPromotion() {
-      if (!websiteUrl.value.trim()) {
+      const url = websiteUrl.value.trim();
+      if (!url) {
         alert('Please enter a valid website URL.');
+        return;
+      }
+
+      // Basic URL validation
+      try {
+        new URL(url);
+      } catch (e) {
+        alert('Please enter a valid URL including http:// or https://');
         return;
       }
 
       promoButton.disabled = true;
       promoButton.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="spin">
-          <path d="m5 12 7-7 7 7"></path>
-          <path d="m12 19-7 7 7-7 7 7"></path>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="spin">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"></path>
         </svg>
         Launching Promotion...
       `;
@@ -394,7 +475,7 @@
           clearInterval(promotionInterval);
           promoButton.disabled = false;
           promoButton.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
               <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -403,9 +484,36 @@
           `;
           progressContainer.classList.add('hidden');
           successMessage.classList.remove('hidden');
-          alert('Promotion Completed across the Cosmos! 🚀');
+          
+          // Use more accessible notification instead of alert for mobile
+          if ('vibrate' in navigator) {
+            navigator.vibrate(200);
+          }
+          
+          // Use a non-blocking notification
+          const notification = document.createElement('div');
+          notification.style.position = 'fixed';
+          notification.style.top = '1rem';
+          notification.style.left = '50%';
+          notification.style.transform = 'translateX(-50%)';
+          notification.style.backgroundColor = 'rgba(34, 197, 94, 0.9)';
+          notification.style.color = 'white';
+          notification.style.padding = '0.75rem 1.5rem';
+          notification.style.borderRadius = '0.5rem';
+          notification.style.zIndex = '100';
+          notification.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+          notification.textContent = 'Promotion Completed across the Cosmos! 🚀';
+          document.body.appendChild(notification);
+          
+          setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+              document.body.removeChild(notification);
+            }, 500);
+          }, 3000);
         }
-      }, 100);
+      }, 50);
     }
   </script>
 </body>
