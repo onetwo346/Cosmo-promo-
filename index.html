@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmo Promo</title>
+    <style>
+        /* Basic Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0a0a0a;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h1, h2 {
+            font-size: 2em;
+            text-align: center;
+        }
+
+        .intro-content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        #tapToPromote {
+            background-color: #ff0077;
+            padding: 15px 30px;
+            font-size: 1.5em;
+            cursor: pointer;
+            border-radius: 10px;
+            margin-top: 20px;
+            animation: pulse 1.5s infinite;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* Pixel 3D Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            background-color: #0077ff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* 3D Pixel Effect for the loading */
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .loading-animation {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #ff0077, #00f0ff);
+            animation: spin 2s linear infinite, pixel3D 1.5s infinite;
+            border-radius: 5px;
+            margin: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pixel3D {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(255, 0, 119, 0.5);
+            }
+            50% {
+                transform: scale(1.2);
+                box-shadow: 0 0 50px rgba(0, 240, 255, 0.8);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(255, 0, 119, 0.5);
+            }
+        }
+
+        #promotionStatus {
+            margin-top: 20px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.8em;
+            color: #888;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Intro Page -->
+    <section id="intro">
+        <div class="intro-content">
+            <h1>Welcome to Cosmo Promo</h1>
+            <p>Your one-stop platform for promoting your website across the universe. Just tap and watch the magic happen!</p>
+            <div class="tap-to-promote" id="tapToPromote">Tap to Promote</div>
+        </div>
+    </section>
+
+    <!-- Main Page for Website URL Input -->
+    <section id="main" class="hidden">
+        <div class="main-content">
+            <h2>Ready to Promote Your Website?</h2>
+            <p>Enter your website URL below and watch as we spread it across the internet.</p>
+            <input type="url" id="websiteURL" placeholder="Enter your website URL" required>
+            <button id="startPromotion">Start Promotion</button>
+            <div id="promotionStatus">
+                <p>Promotion Count: <span id="promotionCount">0</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Animation -->
+    <div id="loading" class="hidden">
+        <div class="loading-animation"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Cosmo Promo. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Button to activate the promotion
+        document.getElementById('tapToPromote').addEventListener('click', () => {
+            document.getElementById('intro').classList.add('hidden');
+            document.getElementById('main').classList.remove('hidden');
+        });
+
+        // Start Promotion
+        document.getElementById('startPromotion').addEventListener('click', () => {
+            const websiteURL = document.getElementById('websiteURL').value;
+            if (!websiteURL) {
+                alert('Please enter a valid website URL.');
+                return;
+            }
+
+            // Show loading animation
+            document.getElementById('loading').style.display = 'block';
+
+            // Fake promotion process with pixel 3D effect
+            let promotionCount = 0;
+            const promotionInterval = setInterval(() => {
+                promotionCount++;
+                document.getElementById('promotionCount').textContent = promotionCount;
+                if (promotionCount >= 100) {  // simulate a limit or completion
+                    clearInterval(promotionInterval);
+                    document.getElementById('loading').style.display = 'none';
+                    alert('Promotion Completed!');
+                }
+            }, 100);  // Adjust interval speed for your needs
+        });
+    </script>
+</body>
+</html>
