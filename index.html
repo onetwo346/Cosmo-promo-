@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmo Promo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(to bottom right, #111827, #000000, #111827);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #starry-bg {
+      position: fixed;
+      inset: 0;
+      background: #000000;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 1rem;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5),
+                 0 0 20px rgba(168, 85, 247, 0.2),
+                 inset 0 0 10px rgba(255, 255, 255, 0.1);
+      transform: perspective(1000px) rotateX(5deg);
+      transition: transform 0.5s ease;
+    }
+
+    .container:hover {
+      transform: perspective(1000px) rotateX(0deg) scale(1.05);
+    }
+
+    .main-container {
+      width: 100%;
+      max-width: 28rem;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, #a855f7, #ec4899);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 5px rgba(168, 85, 247, 0.5);
+    }
+
+    h2 {
+      font-size: 1.875rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, #3b82f6, #06b6d4);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 5px rgba(59, 130, 246, 0.5);
+    }
+
+    p {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      color: #d1d5db;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    button {
+      padding: 1rem 2rem;
+      background: linear-gradient(to right, #ec4899, #a855f7);
+      border-radius: 0.75rem;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 1.125rem;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 0 auto;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(236, 72, 153, 0.4);
+      animation: pulse 2s infinite;
+    }
+
+    button:hover:not(:disabled) {
+      transform: scale(1.1) translateY(-3px);
+      box-shadow: 0 8px 20px rgba(236, 72, 153, 0.6);
+      animation: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      background: rgba(31, 41, 55, 0.8);
+      border: 1px solid #374151;
+      color: #ffffff;
+      font-size: 1rem;
+      outline: none;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    input:focus {
+      border-color: #06b6d4;
+      box-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
+    }
+
+    input::placeholder {
+      color: #6b7280;
+    }
+
+    .promo-button {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(to right, #06b6d4, #3b82f6);
+    }
+
+    .promo-button:disabled {
+      background: #4b5563;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .progress-container {
+      margin-top: 1rem;
+      transition: opacity 0.3s;
+    }
+
+    .progress-bar {
+      width: 100%;
+      background: #4b5563;
+      border-radius: 9999px;
+      height: 0.625rem;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .progress-fill {
+      background: linear-gradient(to right, #06b6d4, #3b82f6);
+      height: 0.625rem;
+      border-radius: 9999px;
+      transition: width 0.1s ease;
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+    }
+
+    .progress-text {
+      text-align: center;
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: #9ca3af;
+    }
+
+    .success-message {
+      margin-top: 1rem;
+      text-align: center;
+      color: #22c55e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-shadow: 0 0 5px rgba(34, 197, 94, 0.3);
+    }
+
+    .spin {
+      animation: spin 1s linear infinite;
+    }
+
+    .bounce {
+      animation: bounce 1s infinite;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 1rem;
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.875rem;
+      z-index: 10;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .space-y-4 > * + * {
+      margin-top: 1rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 640px) {
+      .container {
+        padding: 1.5rem;
+      }
+      h1 { font-size: 1.875rem; }
+      h2 { font-size: 1.5rem; }
+      p { font-size: 1rem; }
+      button { 
+        padding: 0.75rem 1.5rem; 
+        font-size: 1rem;
+      }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starry-bg"></canvas>
+
+  <div class="container" id="intro-page">
+    <h1>Cosmo Promo</h1>
+    <p>Your cosmic gateway to universal website promotion</p>
+    <button onclick="showMainPage()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+        <polyline points="15 3 21 3 21 9"></polyline>
+        <line x1="10" y1="14" x2="21" y2="3"></line>
+      </svg>
+      Launch Promotion
+    </button>
+  </div>
+
+  <div class="container main-container hidden" id="main-page">
+    <h2>Cosmic Promotion Portal</h2>
+    <div class="space-y-4">
+      <input type="url" id="website-url" placeholder="Enter your cosmic website URL">
+      <button id="promo-button" class="promo-button" onclick="startPromotion()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        Start Cosmic Promotion
+      </button>
+      <div class="progress-container hidden" id="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+        <p class="progress-text" id="progress-text">Promotion Progress: 0%</p>
+      </div>
+      <div class="success-message hidden" id="success-message">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bounce">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        Promotion Launched Across the Cosmos!
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bounce">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <footer>© 2025 Cosmo Promo. Spreading websites across the universe.</footer>
+
+  <script>
+    // 3D Starry Background with Animation
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('starry-bg'), alpha: true });
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const particleCount = 1000;
+    const particlesGeometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const velocities = new Float32Array(particleCount * 3);
+
+    for (let i = 0; i < particleCount * 3; i += 3) {
+      positions[i] = (Math.random() - 0.5) * 200;
+      positions[i + 1] = (Math.random() - 0.5) * 200;
+      positions[i + 2] = (Math.random() - 0.5) * 200;
+      velocities[i] = (Math.random() - 0.5) * 0.01;
+      velocities[i + 1] = (Math.random() - 0.5) * 0.01;
+      velocities[i + 2] = (Math.random() - 0.5) * 0.01;
+    }
+
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const particlesMaterial = new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 0.3,
+      transparent: true,
+      opacity: 0.8,
+      blending: THREE.AdditiveBlending,
+    });
+    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particles);
+
+    camera.position.z = 100;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      const positions = particles.geometry.attributes.position.array;
+      for (let i = 0; i < particleCount * 3; i += 3) {
+        positions[i] += velocities[i];
+        positions[i + 1] += velocities[i + 1];
+        positions[i + 2] += velocities[i + 2];
+        
+        if (Math.abs(positions[i]) > 100) velocities[i] *= -1;
+        if (Math.abs(positions[i + 1]) > 100) velocities[i + 1] *= -1;
+        if (Math.abs(positions[i + 2]) > 100) velocities[i + 2] *= -1;
+      }
+      particles.geometry.attributes.position.needsUpdate = true;
+      
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Responsive handling
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Original functionality
+    const introPage = document.getElementById('intro-page');
+    const mainPage = document.getElementById('main-page');
+    const promoButton = document.getElementById('promo-button');
+    const websiteUrl = document.getElementById('website-url');
+    const progressContainer = document.getElementById('progress-container');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    const successMessage = document.getElementById('success-message');
+
+    function showMainPage() {
+      introPage.classList.add('hidden');
+      mainPage.classList.remove('hidden');
+    }
+
+    function startPromotion() {
+      if (!websiteUrl.value.trim()) {
+        alert('Please enter a valid website URL.');
+        return;
+      }
+
+      promoButton.disabled = true;
+      promoButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="spin">
+          <path d="m5 12 7-7 7 7"></path>
+          <path d="m12 19-7 7 7-7 7 7"></path>
+        </svg>
+        Launching Promotion...
+      `;
+      progressContainer.classList.remove('hidden');
+      successMessage.classList.add('hidden');
+
+      let count = 0;
+      const promotionInterval = setInterval(() => {
+        count++;
+        progressFill.style.width = `${count}%`;
+        progressText.textContent = `Promotion Progress: ${count}%`;
+
+        if (count >= 100) {
+          clearInterval(promotionInterval);
+          promoButton.disabled = false;
+          promoButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            Start Cosmic Promotion
+          `;
+          progressContainer.classList.add('hidden');
+          successMessage.classList.remove('hidden');
+          alert('Promotion Completed across the Cosmos! 🚀');
+        }
+      }, 100);
+    }
+  </script>
+</body>
+</html>
